@@ -18,6 +18,8 @@
 - 구성된 Task Graph에 따라 실제 Task 실행
 - 실제 컴파일 및 테스트 패키징등의 작업 수행
 
+> [gradle > build_lifecycle](https://docs.gradle.org/current/userguide/build_lifecycle.html)
+
 
 ## Dependencies
 
@@ -71,5 +73,19 @@ dependencies {
 
 > https://docs.gradle.org/current/userguide/java_library_plugin.html
 
-> [gradle > build_lifecycle](https://docs.gradle.org/current/userguide/build_lifecycle.html)
+
 > [gradle > build environment](https://docs.gradle.org/current/userguide/build_environment.html)
+
+
+## Plugin
+
+- Plugin은 ***빌드 프로세스를 확장하고 자동화***하여 특정 작업을 쉽게 수행할 수 있도록 도와준다. 프로젝트에 필요한 의존성을 주입받기 위해서 dependencies에 의존성을 정의하여 사용하는것과 비슷하게, Plugin은 빌드에 필요한 의존성을 추가하여 사용할 수 있다. 
+  - 코드 컴파일, 테스트 실행, 패키징, 배포 등 다양한 작업을 수행할 수 있도록 한다.
+- Plugin 덕분에 개발자는 빌드 작업에 필요한 코드를 직접 작성할 필요 없이 쉽게 빌드 프로세스를 구성할 수 있다.
+  - Gradle에서 `java` 플러그인을 적용하여 컴파일, 테스트, Jar 생성 등의 작업을 자동화할 수 있다.
+- 이러한 Plugin 속성 덕분에 외부에서 만들어진 Plugin을 쉽게 적용하던가, 직접 Plugin을 만들어서 배포하여 사내에서 활용이 가능하다.
+  - Core Plugin: Gradle에 기본적으로 포함되어 있는 플러그인 (Java)
+  - Community Plugins: Gradle Plugin Portal이나 기타 저장소에서 제공되는 플러그인
+  - Local or Custom Plugins: 개발자가 직접 작성한 플러그인
+
+> https://docs.gradle.org/current/userguide/plugins.html
