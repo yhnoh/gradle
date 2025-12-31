@@ -1,8 +1,10 @@
+import org.gradle.kotlin.dsl.support.KotlinCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 println("[Configuration Phase] build.gradle.kts 스크립트 읽기 시작")
 
 plugins {
-    id("java")
-    id("java-library")  // api
+    kotlin("jvm") version "2.2.21"
 }
 
 group = "org.example"
@@ -15,8 +17,24 @@ allprojects {
 }
 
 subprojects {
-    apply { plugin("java") }
-    apply { plugin("java-library") }
+    apply (plugin = "org.jetbrains.kotlin.jvm")
+
+    dependencies {
+        println("[Configuration Phase] Dependencies 설정")
+
+        testImplementation(kotlin("test"))
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions {
+            freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 tasks.register("hello") {
@@ -27,17 +45,6 @@ tasks.register("hello") {
     doLast {
         println("[Execution Phase] hello task 실행 doLast 블록")
     }
-}
-
-dependencies {
-    println("[Configuration Phase] Dependencies 설정")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 println("[Configuration Phase] build.gradle.kts 스크립트 읽기 완료")
