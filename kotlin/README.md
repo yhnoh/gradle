@@ -4,24 +4,23 @@
 
 
 ## Gradle Build Lifecycle
-- 빌드 라이프사이클은 _**요청된 Task를 실행하기 위해서 Gradle이 거치는 일련의 단계**_
-  - 빌드 환경 초기화부터 프로젝트 구성 및 Task 실행까지의 과정을 포함
+- 빌드 라이프사이클은 요청된 ***Task를 실행하기 위해서 Gradle이 거치는 일련의 단계***며, 빌드 환경 초기화부터 프로젝트 구성 및 Task 실행까지의 과정을 포함한다.
 
 ### Build Lifecycle Phases
 
 ![img.png](img.png)
 #### 1. Initialization Phase (초기화)
-- 셋팅 파일을 확인한 이후, 프로젝트 구조를 분석하고 어떤 프로젝트가 빌드에 포함될지 결정
+- 셋팅 파일을 확인한 이후, 프로젝트 구조를 분석하고 어떤 프로젝트가 빌드에 포함될지 결정한다.
     - `settings.gradle.kts` 파일을 읽고, Settings 객체 생성
     - 해당 객체를 통해서 프로젝트 구조 파악 이후, Project 객체 생성
 
 #### 2. Configuration Phase (구성)
-- 빌드 파일을 확인한 이후, 요청된 Task에 대하여 Task Graph 생성
+- 빌드 파일을 확인한 이후, 요청된 Task에 대하여 Task Graph 생성한다.
   - 모든 `build.gradle.kts` 파일을 읽고, 해당 파일에 정의된 Task, 플러그인, 의존성등을 파악
   - 이후 요청된 Task를 실행하기 위해서 필요한 Task들을 파악하여 Task Graph 구성
 
 #### 3. Execution Phase (실행)
-- Task Graph에 따라 실제 Task 실행
+- Task Graph에 따라 실제 Task 실행한다.
   - 컴파일 및 테스트, 패키징등과 같은 작업 수행
 
 ### Gradle Build Lifecycle 예시
@@ -95,60 +94,26 @@ tasks.register("hello") {
 > https://docs.gradle.org/current/userguide/build_environment.html
 
 
-## Dependencies
+## Dependency Management
+- Gradle에서 의존성(Dependency)은 프로젝트가 빌드되고 실행되기 위해 필요한 외부 라이브러리, 프레임워크, 모듈 등을 의미한다.
+- Gradle은 의존성 관리(Dependency Management)를 통해서 ***프로젝트에 필요한 라이브러리를 자동으로 다운로드하고, 빌드 과정에서 해당 라이브러리를 포함***시켜준다.
 
-### Configuration
+### Dependency Configuration
 - 의존성을 선언함과 동시에, 해당 의존성이 언제 어떻게 사용될지를 결정
   - 예를 들어 compileOnly의 경우에는 컴파일 시점에만 해당 라이브러리를 참조하여 사용하고 런타임 시점에는 라이브러리가 포함되지 않는다.
     - Lombok 라이브러리가 대표적인 예시
   - 반대로 runtimeOnly의 경우에는 컴파일 서점에는 해당 라이브러리를 참조하지 않지만, 런타임 시점에는 라이브러리가 포함된다.
     - mysql-connector 라이브러리가 대표적인 예시
 
-> https://docs.gradle.org/current/userguide/dependency_configurations.html
-
-### api vs implementation
+#### api vs implementation
 
 - api와 implementation의 차이점은 의존성 노출(Dependency Exposure) 여부에 따라 나뉜다.
-  - api: 선언한 모듈  
-  - implementation: 해당 모듈 내부에서만 라이브러리를 사용하고, 의존하는 다른 모듈에서는 접근 불가능
-
-```groovy
-// moduleA
-plugins {
-    kotlin("jvm")
-}
-
-dependencies {
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-}
-```
-
-```groovy
-//moduleB
-dependencies {
-    implementation(project(":moduleA"))
-}
-
-dependencies {
-  implementation(project(":moduleB"))
-}
-
-```
-
-```groovy
-//moduleC
-dependencies {
-  implementation(project(":moduleB"))
-}
-```
+  - api: 내가 만든 모듈을 의존하는 다른 모듈에서도 해당 라이브러리를 사용할 수 있도록 노출
+  - implementation: 내가 만든 모듈 내부에서만 해당 라이브러리를 사용하도록 제한
 
 
-> [dependency configurations](https://docs.gradle.org/current/userguide/dependency_configurations.html)
-
-> https://docs.gradle.org/current/userguide/java_library_plugin.html
-
-
-> [gradle > build environment](https://docs.gradle.org/current/userguide/build_environment.html)
+> https://docs.gradle.org/current/userguide/dependency_management_basics.html
+> https://docs.gradle.org/current/userguide/part3_gradle_dep_man.html
 
 
 ## Plugin
