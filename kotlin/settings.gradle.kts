@@ -4,13 +4,13 @@ rootProject.name = "kotlin"
 include("lifecycle")
 
 
-include("dependency-configuration:api:modulea")
-include("dependency-configuration:api:moduleb")
-include("dependency-configuration:api:modulec")
+include("dependency:api:modulea")
+include("dependency:api:moduleb")
+include("dependency:api:modulec")
 
-include("dependency-configuration:implementation:modulea")
-include("dependency-configuration:implementation:moduleb")
-include("dependency-configuration:implementation:modulec")
+include("dependency:implementation:modulea")
+include("dependency:implementation:moduleb")
+include("dependency:implementation:modulec")
 
 
 println("[Initialization Phase] 프로젝트 구조 파악")

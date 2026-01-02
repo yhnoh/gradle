@@ -127,4 +127,5 @@ tasks.register("hello") {
   - Community Plugins: Gradle Plugin Portal이나 기타 저장소에서 제공되는 플러그인
   - Local or Custom Plugins: 개발자가 직접 작성한 플러그인
 
+> https://docs.gradle.org/current/userguide/plugin_basics.html
 > https://docs.gradle.org/current/userguide/plugins.html

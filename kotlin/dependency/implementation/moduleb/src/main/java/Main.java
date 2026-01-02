@@ -1,5 +1,3 @@
-package org.modulec;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.modulea.User;
 
