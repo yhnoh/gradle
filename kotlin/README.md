@@ -1,24 +1,98 @@
 
-### Gradle
-- Gradle은 빌드 자동화 도구로, 소프트웨어 프로젝트의 빌드, 테스트, 배포 과정을 자동화
+## Gradle
+- Gradle은 빌드 스크립트를 기반으로 _**소프트웨어 프로젝트의 빌드, 테스트, 배포 과정을 자동화**_ 해주는 도구다.
 
 
-### Gradle Build Lifecycle
+## Gradle Build Lifecycle
+- 빌드 라이프사이클은 _**요청된 Task를 실행하기 위해서 Gradle이 거치는 일련의 단계**_
+  - 빌드 환경 초기화부터 프로젝트 구성 및 Task 실행까지의 과정을 포함
+
+### Build Lifecycle Phases
 
 ![img.png](img.png)
 #### 1. Initialization Phase (초기화)
-- 프로젝트 구조를 분석하고 어떤 프로젝트가 빌드에 포함될지 결정
-    - `settings.gradle.kts` 파일을 찾아, Settings 객체 생성
+- 셋팅 파일을 확인한 이후, 프로젝트 구조를 분석하고 어떤 프로젝트가 빌드에 포함될지 결정
+    - `settings.gradle.kts` 파일을 읽고, Settings 객체 생성
     - 해당 객체를 통해서 프로젝트 구조 파악 이후, Project 객체 생성
+
 #### 2. Configuration Phase (구성)
-- 빌드 파일을 확인한 이후 요청한 Task에 대하여 Task Graph 생성
-  - `build.gradle.kts` 파일을 읽고, 각 프로젝트에 대한 Task와 설정을 구성
+- 빌드 파일을 확인한 이후, 요청된 Task에 대하여 Task Graph 생성
+  - 모든 `build.gradle.kts` 파일을 읽고, 해당 파일에 정의된 Task, 플러그인, 의존성등을 파악
+  - 이후 요청된 Task를 실행하기 위해서 필요한 Task들을 파악하여 Task Graph 구성
 
 #### 3. Execution Phase (실행)
-- 구성된 Task Graph에 따라 실제 Task 실행
-- 실제 컴파일 및 테스트 패키징등의 작업 수행
+- Task Graph에 따라 실제 Task 실행
+  - 컴파일 및 테스트, 패키징등과 같은 작업 수행
 
-> [gradle > build_lifecycle](https://docs.gradle.org/current/userguide/build_lifecycle.html)
+### Gradle Build Lifecycle 예시
+
+- 아래는 `./gradlew :lifecycle:hello` 명령어를 실행했을 때, 실제로 Gradle Build Lifecycle이 어떻게 진행되는지 보여주는 예시이다.
+
+```kotlin
+// ./settings.gradle.kts
+rootProject.name = "kotlin"
+
+include("lifecycle")
+
+println("[Initialization Phase] 프로젝트 구조 파악")
+```
+
+```kotlin
+// ./build.gradle.kts
+println("[Configuration Phase] build.gradle.kts 스크립트 읽기 시작")
+
+plugins {
+    kotlin("jvm") version "2.2.21"
+}
+
+dependencies {
+  testImplementation(kotlin("test"))
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+println("[Configuration Phase] build.gradle.kts 스크립트 읽기 완료")
+```
+
+```kotlin
+// ./lifecycle/build.gradle.kts
+
+tasks.register("hello") {
+    println("[Configuration Phase] hello task 등록")
+    doFirst {
+        println("[Execution Phase] hello task 실행 doFirst 블록")
+    }
+    doLast {
+        println("[Execution Phase] hello task 실행 doLast 블록")
+    }
+}
+```
+
+```shell
+## hello task 실행
+./gradlew :lifecycle:hello
+
+## 출력 결과
+[Initialization Phase] 프로젝트 구조 파악
+
+> Configure project :
+[Configuration Phase] build.gradle.kts 스크립트 읽기 시작
+[Configuration Phase] build.gradle.kts 스크립트 읽기 완료
+[Configuration Phase] hello task 등록
+
+> Task :lifecycle:hello
+[Execution Phase] hello task 실행 doFirst 블록
+[Execution Phase] hello task 실행 doLast 블록
+
+```
+
+> https://docs.gradle.org/current/userguide/build_lifecycle_intermediate.html
+
+
+## Gradle Build Environment
+> https://docs.gradle.org/current/userguide/build_environment.html
 
 
 ## Dependencies
