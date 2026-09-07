@@ -10,6 +10,10 @@ plugins {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
+kotlin {
+    jvmToolchain(21)
+}
+
 allprojects {
     repositories {
         mavenCentral()
@@ -18,6 +22,10 @@ allprojects {
 
 subprojects {
     apply (plugin = "org.jetbrains.kotlin.jvm")
+
+    extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension> {
+        jvmToolchain(21)
+    }
 
     dependencies {
         println("[Configuration Phase] Dependencies 설정")
@@ -28,7 +36,7 @@ subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             freeCompilerArgs.set(listOf("-Xjsr305=strict"))
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 
